@@ -1,0 +1,105 @@
+
+<!--We indicate to the framework that this is the code is going to be inserted in our main page-->
+{% extends 'layout.html'%}
+{% block body %}
+
+
+	<center>
+	<h1 class="blue-text">Agenda de datos</h1>
+	<br>
+
+	<!--Here we create the table that it's going to containe all the contacts of our DB-->
+	<table id="tabla" class="striped z-depth-3 ">
+		<!--Here we put the titles for each column-->	
+		<tr class="z-depth-1">
+			<th>Nombre</th>
+			<th>Telefono</th>
+			<th>Email</th>
+			<th>Acciones</th>
+		</tr>
+		<!--We create a for bucle to print all the values that we received from the query-->
+		{% for dato in data%}
+		<tr class="z-depth-1">
+			<td> {{dato.1}} </td>
+			<td> {{dato.2}} </td>
+			<td> {{dato.3}} </td>
+			<td>
+				<!--Here is created the buttons for the actions on each value-->
+				<div class="collection striped z-depth-1">
+				<li><a href="/delete/{{dato.0}}" class="collection-item">Eliminar</a></li>
+				<a href="/modify/{{dato.0}}" class="collection-item">Modificar</a>
+				</div>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<br>
+	
+		<!--Here we receivd the messages to show-->
+	<br>
+  		{% with messages = get_flashed_messages() %}
+  		{% if messages %}
+  		{% for message in messages %}
+  			<p> {{message}} </p>
+  		{% endfor %}
+  		{% endif %}
+  		{% endwith%}
+    	
+		<!--Here we create the form to save and search the contacts-->
+    <div class="row">
+      	<form class="col 12" action="/add" method = "POST">
+      	<div class="row">
+      	<!--Here is created a column for a input textbox-->
+      	<div class="input-field col s4">
+          <input id="nombre" type="text" name="nombre" >
+          <label for="nombre">Nombre</label>
+          </div>
+
+          <!--Here is created a column for a input textbox-->
+          <div class="input-field col s4">
+          <input id="telefono" type="tel" name="telefono">
+          <label for="telefono">Telefono</label>
+          </div>
+
+		  <!--Here is created a column for a input textbox-->
+          <div class="input-field col s4">
+          <input id="email" type="email" name="email">
+          <label for="email">Email</label>
+          </div>
+          <br>
+      <button class="waves-effect waves-light btn z-depth-3" type="submit">Agregar</button>
+
+      </div>
+      </form>
+      <br><br>
+	  <!--Here we create the buttons for the search and show all the contacts-->
+      <button class="waves-effect waves-light btn z-depth-3" onclick="busca()">Buscar</button> 
+      <button class="waves-effect waves-light btn z-depth-3" onclick="todo()">Mostrar todos</button>
+
+  	</div>
+</center>
+
+	<script type="text/javascript">
+		//In this function, we get searh in the DB the name that we have in the textbox name
+		function busca () {
+			var nombre = document.getElementById('nombre').value;
+			if(nombre.length > 0 ){
+				location.href='/buscar/'+nombre;
+			} else {
+				alert("No puedes dejar el campo llave vacio, intentalo de nuevo");
+			}
+		}
+
+		//Here we make the order to show all the contacts
+		function todo () {
+			location.href='/'
+		}
+	</script>
+
+	<!--We need this scripts so the CSS can work propertly-->
+	<script src="js/jquery-3.2.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+
+{% endblock %}
+

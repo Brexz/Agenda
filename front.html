@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Agenda de datos</title>
+	 <!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+</head>
+<body>
+	<center>
+	<h1 class="blue-text">Agenda de datos</h1>
+	<br>
+	<table class ='blue lighten-1' id="tabla">
+		<tr>
+			<th>Nombre</th>
+			<th>Telefono</th>
+			<th>Email</th>
+		</tr>
+	</table>
+	<br>
+	<p><button class="btn waves-effect waves-light" onclick="agrega()">Agregar</button> <button class="btn waves-effect waves-light" onclick="elimina()">Eliminar</button> <button class="btn waves-effect waves-light" onclick="modifica()">Modificar</button> <button class="btn waves-effect waves-light" onclick="busca()">Buscar</button> <button class="btn waves-effect waves-light" onclick="actualiza()">Mostrar todos</button> </p>
+	
+<br>
+  <div class="row">
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s4">
+          <i class="material-icons prefix">account_circle</i>
+          <input id="nombre" type="text" class="validate">
+          <label for="nombre">Nombre</label>
+        </div>
+        <div class="input-field col s4">
+          <i class="material-icons prefix">phone</i>
+          <input id="telefono" type="tel" class="validate">
+          <label for="telefono">Telefono</label>
+        </div>
+        <div class="input-field col s4">
+          <i class="material-icons prefix">email</i>
+          <input id="email" type="email" class="validate">
+          <label for="email">Email</label>
+        </div>
+      </div>
+    </form>
+  </div>
+</center>
+
+	<script type="text/javascript">
+		
+		function actualiza () {
+			var inicio = '<table border="2" id="tabla"><tr><th>Nombre</th><th>Telefono</th><th>Email</th></tr>' ; 
+			var fin = "</table>"
+			var filas = "";
+			var i = 0 ;
+			while (i < datos.length) {
+				filas += '<tr><td> '+ datos[i] +'</td><td>' + datos[i+1] + '</td><td>' + datos[i+2] + '</td></tr>';
+				i += 3;
+			}
+			document.getElementById("tabla").innerHTML = inicio + filas + fin;
+		}
+
+		function agrega() {
+			var nombre = document.getElementById('nombre').value;
+			var telefono = document.getElementById('telefono').value;
+			var email = document.getElementById('email').value;
+			if ((nombre.length > 0 ) && (telefono.length > 0 ) && (email.length > 0 )) {
+				$.ajax({
+					method: 'POST',
+					url: 'back.py',
+					data: {
+						'nombre': nombre,
+						'telefono': telefono,
+						'email': email,
+					},
+					dataType: "json",
+					success: function(response) {
+						var resultado = val(response.resultado);
+					}
+				}); 
+			} else {
+				alert("No puedes dejar campos vacios, intentalo de nuevo") ;
+			}
+			
+		}
+
+		function elimina () {
+			var nombre = document.getElementById('nombre').value;
+			if (nombre.length > 0) {
+				var encontrado = false ;
+				for (var i = 0; i < datos.length; i+=3) {
+					if (nombre == datos[i]) {
+						encontrado = true ; 
+						if (confirm("Deses eliminar el dato " + nombre + " ?")) {
+							datos.splice(i, i+3);
+							actualiza();
+						} 
+					} 
+				}
+				if (encontrado == false) {
+					alert("Dato no encontrado"); 
+				}
+			} else {
+				alert("No puedes dejar el campo llave vacio, intentalo de nuevo");
+			}
+		}
+
+		function modifica () {
+			var nombre = document.getElementById('nombre').value;
+			var telefono = document.getElementById('telefono').value;
+			var email = document.getElementById('email').value;
+			if ((nombre.length > 0 ) && (telefono.length > 0 ) && (email.length > 0 )) {
+				var encontrado = false ;
+				for (var i = 0; i < datos.length; i+=3) {
+					if (nombre == datos[i]) {
+						encontrado = true ; 
+						if (confirm("Deses modificar el dato " + nombre + " ?")) {
+							datos.splice(i, i+3);
+							datos.push(nombre, telefono, email) ;
+							actualiza();
+						} 
+					} 
+				}
+				if (encontrado == false) {
+					alert("Dato no encontrado"); 
+				}	
+			} else {
+				alert("No puedes dejar campos vacios, intentalo de nuevo");
+			}
+			
+		}
+
+		function busca () {
+			var nombre = document.getElementById('nombre').value;
+			if(nombre.length > 0 ){
+				var encontrado = false ;
+				for (var i = 0; i < datos.length; i+=3) {
+					if (nombre == datos[i]) {
+						encontrado = true ; 
+						var inicio = '<table border="2" id="tabla"><tr><th>Nombre</th><th>Telefono</th><th>Email</th></tr>' ; 
+						var fin = "</table>";
+						var filas = "";
+						filas += '<tr><td> '+ datos[i] +'</td><td>' + datos[i+1] + '</td><td>' + datos[i+2] + '</td></tr>';
+						document.getElementById("tabla").innerHTML = inicio + filas + fin;
+						break;
+					} 
+				}
+				if (encontrado == false ){
+					alert("Dato no encontrado");
+				}
+			} else {
+				alert("No puedes dejar el campo llave vacio, intentalo de nuevo");
+			}
+		}
+		
+	</script>
+
+	
+	<script src="js/jquery-3.2.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+</body>
+</html>
+
+</body>
+</html>

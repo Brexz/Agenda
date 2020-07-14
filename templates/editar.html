@@ -1,0 +1,35 @@
+{% extends 'layout.html'%}
+
+{% block body%}
+
+<center>
+<h1 class="blue-text">Editar contacto</h1>
+</center>
+
+<div class="row">
+<form action="/update/{{dato.0}}" method = "POST">
+  <div class="row">
+<div class="input-field col s4">
+          <input id="nombre" type="text" name="nombre" value="{{dato.1}}">
+          <label for="nombre">Nombre</label>
+          </div>
+
+          <div class="input-field col s4">
+          <input id="telefono" type="tel" name="telefono" value="{{dato.2}}">
+          <label for="telefono">Telefono</label>
+          </div>
+
+          <div class="input-field col s4">
+          <input id="email" type="email" name="email" value="{{dato.3}}">
+          <label for="email">Email</label>
+          </div>
+          <br>
+      <center><button class="waves-effect waves-light btn z-depth-3" type="submit">Modificar</button>
+        </center>
+</form>
+
+    <script src="js/jquery-3.2.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+
+{% endblock %}
